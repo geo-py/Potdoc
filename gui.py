@@ -12,8 +12,8 @@ class MainWindow(tk.Frame):
         self.master.wm_iconbitmap('media/potdoc.ico')
         #self.master.resizable(False, False)
 
-        width = 600
-        height = 500
+        width = 400
+        height = 300
         #get centre x coord
         x = int((self.master.winfo_screenwidth() - self.master.winfo_reqwidth())/2)
         #get centre (1 third) y coord
@@ -21,30 +21,36 @@ class MainWindow(tk.Frame):
         self.master.geometry("{}x{}+{}+{}".format(width, height, x, y))
 
         #sub frames
-        toFrame = tk.Frame(self)
-        toFrame.pack(side='right', padx=20, pady=20)
-        fromFrame = tk.Frame(self)
-        fromFrame.pack(side='left', padx=20, pady=20)
-        extraFrame = tk.Frame(self)
-        extraFrame.pack(side='bottom', padx=20, pady=20)
         inputFrame = tk.Frame(self)
-        inputFrame.pack(side='top', padx=20, pady=20)
-
+        inputFrame.pack(anchor='w')
+        fromFrame = tk.Frame(self)
+        fromFrame.pack(anchor='w')
+        toFrame = tk.Frame(self)
+        toFrame.pack(anchor='w')
+        extraFrame = tk.Frame(self)
+        extraFrame.pack(anchor='w')
+        
         #buttons
-        self.okButton = tk.Button(extraFrame, text='OK', default='active', command=self.click_ok)
-        self.inputButton = tk.Button(inputFrame, text='Select File', default='active', command=self.select_file)
+        self.okButton = ttk.Button(extraFrame, text='OK', default='active', command=self.click_ok)
+        self.inputButton = ttk.Button(inputFrame, text='Browse', default='active', command=self.select_file)
         self.inputButton.focus_set()
        
         #labels
         lblTo = tk.Label(toFrame, text="To")
-        lblFrom = tk.Label(fromFrame, text="From")
-        lblInput = tk.Label(inputFrame, text="Inputs")
+        #lblFrom = tk.Label(fromFrame, text="From")
+        lblInput = tk.Label(inputFrame, text="file path")
         
         lblOutput = tk.Label(extraFrame, text="Ouput filename")
 
         #text entries
-        self.txtOutput = tk.Entry(extraFrame)
+        self.vTxtOutput = tk.StringVar()
+        self.vTxtOutput.set('')
+        self.txtOutput = ttk.Entry(extraFrame, textvariable=self.vTxtOutput, width="35")
 
+        self.vTxtInput = tk.StringVar()
+        self.vTxtInput.set('C:/User/Desktop/Example.md')
+        self.txtInput = ttk.Entry(inputFrame, textvariable=self.vTxtInput, width="35")
+        
         #comboboxes
         """ INPUTS = [
             ("Markdown",'.md'),     
@@ -60,37 +66,38 @@ class MainWindow(tk.Frame):
             ("Open Document Format", '.odt'), 
             ("Word", '.docx'),
             ] """
-        OUTPUTS = ['.pdf', '.tex', '.html', '.odt', '.docx']
-        INPUTS = ['.md', '.tex', '.odt', '.docx', '.html']
+        OUTPUTS = ['.pdf', '.tex', '.html', '.odt', '.docx']        
         self.vCmbTo = tk.StringVar()
-        self.cmbTo = ttk.Combobox(toFrame, textvariable=self.vCmbTo, values=OUTPUTS, state="readonly")
+        self.vCmbTo.set('.pdf')
+        self.cmbTo = ttk.Combobox(toFrame, textvariable=self.vCmbTo, values=OUTPUTS, state="readonly", width="32")
+        #INPUTS = ['.md', '.tex', '.odt', '.docx', '.html']
         #self.vCmbFrom = tk.StringVar()
         #self.cmbFrom = ttk.Combobox(fromFrame, textvariable=self.vCmbFrom ,values=INPUTS, state="readonly")
 
         #packing
-        lblTo.pack(side="top")
-        self.cmbTo.pack(side="top", padx=20, pady=20)
+        lblTo.pack(anchor='w')
+        self.cmbTo.pack(anchor='w')
 
-        #lblFrom.pack(side="top")
-        #self.cmbFrom.pack(side="top", padx=20, pady=20)
+        #lblFrom.pack()
+        #self.cmbFrom.pack()
 
-        lblInput.pack(side="top", padx=20, pady=20)
-        self.inputButton.pack(side='top')
-
-        lblOutput.pack(side="top")
-        self.txtOutput.pack(side="top", padx=20, pady=20)
-
-        self.okButton.pack(side='bottom')
+        lblInput.pack(anchor='w')
+        self.inputButton.pack(side="right", anchor='w')
+        self.txtInput.pack(side="left", anchor="w")
+        
+        lblOutput.pack(anchor='w')
+        self.txtOutput.pack(anchor='w')
+        self.okButton.pack(side="bottom", anchor='w', pady=20)
 
         
 
         #==============UNUSED=====================
         #self.styleButton = tk.Button(extraFrame, text='Custom Theme', default='active', command=self.select_style)
-        #self.styleButton.pack(side='top')
+        #self.styleButton.pack()
 
         #lblExtra = tk.Label(extraFrame, text="Extra Arguments")
-        #lblExtra.pack(side="top")
-        #self.txtExtraArgs.pack(side="top", padx=20, pady=20)
+        #lblExtra.pack()
+        #self.txtExtraArgs.pack()
         #self.txtExtraArgs = tk.Entry(extraFrame, width=20)
 
         """
@@ -108,22 +115,24 @@ class MainWindow(tk.Frame):
         """
 
     def select_file(self):
-        self.selected_file = tk.filedialog.askopenfilename(parent=self, initialdir = "/",title = "Select file", filetypes = (("markdown files","*.md *.markdown"), ("plain text files","*.txt"), ("all files","*.*")))
+        self.selected_file = tk.filedialog.askopenfilename(parent=self, initialdir = "Desktop/", title = "Select file", filetypes = (("markdown files","*.md *.markdown"), ("plain text files","*.txt"), ("all files","*.*")))
+        self.vTxtInput.set(self.selected_file)
+        print(self.selected_file)
         return self.selected_file
 
     def select_style(self): #currently unused
-        self.selected_style = tk.filedialog.askopenfilename(parent=self, initialdir = "/",title = "Select file", filetypes = (("styles/themes","*.css"),("all files","*.*")))
+        self.selected_style = tk.filedialog.askopenfilename(parent=self, initialdir = "Desktop/", title = "Select file", filetypes = (("styles/themes","*.css"),("all files","*.*")))
         return self.selected_style
 
     def click_ok(self):
         #get parameters
-        filename = self.selected_file
-        formatTo= self.vCmbTo.get()
-        #formatFrom = self.vCmbFrom.get()
-
+        filepath = self.vTxtInput.get()
+        formatTo = self.vCmbTo.get()
+        
         #output filename
         outFileName=self.txtOutput.get()
-
+        print(outFileName)
+        
         style='styles/default.css'
 
         """  
@@ -133,7 +142,7 @@ class MainWindow(tk.Frame):
         ] 
         """
         
-        potdoc.convert(self, filename, formatTo, outFileName)
+        potdoc.convert(self, filepath, formatTo, outFileName)
 #==========================================================================#
 if __name__=="__main__":
     root = tk.Tk() 
