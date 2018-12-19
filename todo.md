@@ -1,8 +1,8 @@
-1. add logic to functions
-2. change taskbar icon
-3. drag and drop 
-4. update readme with installation, features and philosophy
-5. figure out how to package it as executable
-6. add custom style picking and extra argument field
-7. user input validation with error messages
-8. pass pandoc errors to user
+# To Do
+1. change taskbar icon
+2. drag and drop a file into window to import file path
+3. create a setup.py to aid setup 
+4. figure out how to package it as executable, maybe [cx_freeze](https://anthony-tuininga.github.io/cx_Freeze/)
+5. user input validation with error messages
+6. pass pandoc errors to user 
+7. add custom style picking and extra argument field

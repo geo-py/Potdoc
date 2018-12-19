@@ -66,9 +66,9 @@ class MainWindow(tk.Frame):
             ("Open Document Format", '.odt'), 
             ("Word", '.docx'),
             ] """
-        OUTPUTS = ['.pdf', '.tex', '.html', '.odt', '.docx']        
+        OUTPUTS = ['pdf', 'tex', 'html', 'odt', 'docx']        
         self.vCmbTo = tk.StringVar()
-        self.vCmbTo.set('.pdf')
+        self.vCmbTo.set('pdf')
         self.cmbTo = ttk.Combobox(toFrame, textvariable=self.vCmbTo, values=OUTPUTS, state="readonly", width="32")
         #INPUTS = ['.md', '.tex', '.odt', '.docx', '.html']
         #self.vCmbFrom = tk.StringVar()
@@ -89,31 +89,6 @@ class MainWindow(tk.Frame):
         self.txtOutput.pack(anchor='w')
         self.okButton.pack(side="bottom", anchor='w', pady=20)
 
-        
-
-        #==============UNUSED=====================
-        #self.styleButton = tk.Button(extraFrame, text='Custom Theme', default='active', command=self.select_style)
-        #self.styleButton.pack()
-
-        #lblExtra = tk.Label(extraFrame, text="Extra Arguments")
-        #lblExtra.pack()
-        #self.txtExtraArgs.pack()
-        #self.txtExtraArgs = tk.Entry(extraFrame, width=20)
-
-        """
-        v1 = tk.StringVar()
-        v1.set(".md") # initialize
-        for text, inputs in INPUTS:
-            self.rbFrom = tk.Radiobutton(fromFrame, text=text, variable=v1, value=inputs)
-            self.rbFrom.pack(side='top', anchor='w')
-       
-        v2 = tk.StringVar()
-        v2.set(".pdf") # initialize
-        for text, outputs in OUTPUTS:
-            self.rbTo = tk.Radiobutton(toFrame, text=text, variable=v2, value=outputs)
-            self.rbTo.pack(side='top', anchor='w') 
-        """
-
     def select_file(self):
         self.selected_file = tk.filedialog.askopenfilename(parent=self, initialdir = "Desktop/", title = "Select file", filetypes = (("markdown files","*.md *.markdown"), ("plain text files","*.txt"), ("all files","*.*")))
         self.vTxtInput.set(self.selected_file)
@@ -132,9 +107,11 @@ class MainWindow(tk.Frame):
         #output filename
         outFileName=self.txtOutput.get()
         print(outFileName)
-        
-        style='styles/default.css'
 
+        #styles
+        #style='styles/default.css'
+
+        #extra arguments
         """  
         extraArguaments=[
            self.txtExtraArgs,
