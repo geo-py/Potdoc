@@ -1,0 +1,59 @@
+html {
+	background: #FDF6E3;
+	font-family: "Helvetica", "Arial", Sans-Serif;
+	color: #93A1A1;
+	letter-spacing: 1.2px;
+	font-size: 14px;
+	padding: 10%;
+}
+
+p {
+	color: inherit;
+	font-style: inherit;
+}
+
+ul {
+	color: inherit;
+	font-style: inherit;
+	list-style-type: circle;
+}
+
+ol {
+	color: inherit;
+	font-style: inherit;
+	list-style-type: lower-alpha;
+}
+
+/* bold text */
+strong {
+	color: #D33682;
+}
+
+/*code block formatting*/
+pre {
+	background: #EEE8D5;
+
+	border-style: solid ;
+	border-radius: 10px;
+	border-color: #839496;
+	color:  #839496;
+	page-break-inside: avoid;
+	font-family: monospace;
+
+	line-height: 1.6;
+	margin-bottom: 1.6em;
+	max-width: 100%;
+	overflow: auto;
+	padding: 1em 1.5em;
+	display: block;
+	word-wrap: break-word;
+}
+
+h1, h2, h3, h4, h5, h6 {
+	text-align: center;
+	font-weight: bold;
+	color: #839496;
+	/*add border underneath headings*/
+	border-bottom: 1px solid #CCC;
+	padding-bottom: 3px;
+}

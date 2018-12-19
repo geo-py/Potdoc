@@ -1,7 +1,7 @@
 import tkinter as tk
-from tkinter import filedialog
-import logic
-from logic import go
+from tkinter import filedialog, ttk
+import potdoc
+from potdoc import convert
 
 class MainWindow(tk.Frame):
     def __init__(self, master):
@@ -31,117 +31,112 @@ class MainWindow(tk.Frame):
         inputFrame.pack(side='top', padx=20, pady=20)
 
         #buttons
-        okButton = tk.Button(extraFrame, text='OK', default='active', command=click_ok)
-        inputButton = tk.Button(inputFrame, text='Select File', default='active', command=select_file)
+        self.okButton = tk.Button(extraFrame, text='OK', default='active', command=self.click_ok)
+        self.inputButton = tk.Button(inputFrame, text='Select File', default='active', command=self.select_file)
+        self.inputButton.focus_set()
        
         #labels
         lblTo = tk.Label(toFrame, text="To")
         lblFrom = tk.Label(fromFrame, text="From")
         lblInput = tk.Label(inputFrame, text="Inputs")
-        lblExtra = tk.Label(extraFrame, text="Extra Arguments")
+        
         lblOutput = tk.Label(extraFrame, text="Ouput filename")
 
-        #checkbox
-        stylecheckboxvar = tk.IntVar()
-        stylecheckbox = tk.Checkbutton(extraFrame, text="custom theme", variable=stylecheckboxvar)
-
         #text entries
-        txtExtraArgs = tk.Entry(extraFrame, width=20)
-        txtOutput = tk.Entry(extraFrame)
+        self.txtOutput = tk.Entry(extraFrame)
+
+        #comboboxes
+        """ INPUTS = [
+            ("Markdown",'.md'),     
+            ("Open Document Format",'.odt'),    
+            ("Word",'.docx'),   
+            ("HTML",'.html'),  
+            ]
+
+        OUTPUTS = [
+            ("PDF", '.pdf'), 
+            ("LaTeX", '.tex'), 
+            ("HTML", '.html'), 
+            ("Open Document Format", '.odt'), 
+            ("Word", '.docx'),
+            ] """
+        OUTPUTS = ['.pdf', '.tex', '.html', '.odt', '.docx']
+        INPUTS = ['.md', '.tex', '.odt', '.docx', '.html']
+        self.vCmbTo = tk.StringVar()
+        self.cmbTo = ttk.Combobox(toFrame, textvariable=self.vCmbTo, values=OUTPUTS, state="readonly")
+        #self.vCmbFrom = tk.StringVar()
+        #self.cmbFrom = ttk.Combobox(fromFrame, textvariable=self.vCmbFrom ,values=INPUTS, state="readonly")
 
         #packing
         lblTo.pack(side="top")
-        lblFrom.pack(side="top")
+        self.cmbTo.pack(side="top", padx=20, pady=20)
+
+        #lblFrom.pack(side="top")
+        #self.cmbFrom.pack(side="top", padx=20, pady=20)
 
         lblInput.pack(side="top", padx=20, pady=20)
-        inputButton.pack(side='top')
-
-        stylecheckbox.pack(side="top", padx=20, pady=20)
-
-        lblExtra.pack(side="top")
-        txtExtraArgs.pack(side="top", padx=20, pady=20)
+        self.inputButton.pack(side='top')
 
         lblOutput.pack(side="top")
-        txtOutput.pack(side="top", padx=20, pady=20)
+        self.txtOutput.pack(side="top", padx=20, pady=20)
 
-        okButton.pack(side='bottom')
-        
-        #radiobuttons
-        def populateRadioButtons(rb, parent, list):
-            v = tk.StringVar()
-            v.set(list[0]) # initialize
-            for i in range (0, len(list)): #generating listbox contents 
-                rb = tk.Radiobutton(parent, text=list[i-len(list)], variable=v, value=list[i-len(list)], state="active")
-                rb.pack(side="top", anchor='w')
-
-        outputs = ['.pdf', '.tex', '.html', '.odt', '.docx']
-        populateRadioButtons('rbTo', toFrame, outputs)      
-
-        inputs = ['.md', '.odt', '.docx', '.html']
-        populateRadioButtons('rbFrom', fromFrame, inputs)
-
-        """ #listboxes
-        def populateListBox(lb, list):
-            for i in range (0, len(list)): #generating listbox contents 
-                lb.insert(i, list[i])
-                #lb.pack(side='left')       
-                
-        lbTo = tk.Listbox(toFrame, selectmode="SINGLE")
-        outputs = ['.pdf', '.tex', '.html', '.odt', '.docx']
-        populateListBox(lbTo, outputs)      
-        lbTo.pack(side="bottom")
-
-        lbFrom = tk.Listbox(fromFrame, selectmode="SINGLE")
-        inputs = ['.md', '.odt', '.docx', '.html']
-        populateListBox(lbFrom, inputs)
-        lbFrom.pack(side="bottom") """
+        self.okButton.pack(side='bottom')
 
         
 
+        #==============UNUSED=====================
+        #self.styleButton = tk.Button(extraFrame, text='Custom Theme', default='active', command=self.select_style)
+        #self.styleButton.pack(side='top')
 
+        #lblExtra = tk.Label(extraFrame, text="Extra Arguments")
+        #lblExtra.pack(side="top")
+        #self.txtExtraArgs.pack(side="top", padx=20, pady=20)
+        #self.txtExtraArgs = tk.Entry(extraFrame, width=20)
+
+        """
+        v1 = tk.StringVar()
+        v1.set(".md") # initialize
+        for text, inputs in INPUTS:
+            self.rbFrom = tk.Radiobutton(fromFrame, text=text, variable=v1, value=inputs)
+            self.rbFrom.pack(side='top', anchor='w')
+       
+        v2 = tk.StringVar()
+        v2.set(".pdf") # initialize
+        for text, outputs in OUTPUTS:
+            self.rbTo = tk.Radiobutton(toFrame, text=text, variable=v2, value=outputs)
+            self.rbTo.pack(side='top', anchor='w') 
+        """
+
+    def select_file(self):
+        self.selected_file = tk.filedialog.askopenfilename(parent=self, initialdir = "/",title = "Select file", filetypes = (("markdown files","*.md *.markdown"), ("plain text files","*.txt"), ("all files","*.*")))
+        return self.selected_file
+
+    def select_style(self): #currently unused
+        self.selected_style = tk.filedialog.askopenfilename(parent=self, initialdir = "/",title = "Select file", filetypes = (("styles/themes","*.css"),("all files","*.*")))
+        return self.selected_style
+
+    def click_ok(self):
+        #get parameters
+        filename = self.selected_file
+        formatTo= self.vCmbTo.get()
+        #formatFrom = self.vCmbFrom.get()
+
+        #output filename
+        outFileName=self.txtOutput.get()
+
+        style='styles/default.css'
+
+        """  
+        extraArguaments=[
+           self.txtExtraArgs,
+           '--css {}'.format(style)
+        ] 
+        """
+        
+        potdoc.convert(self, filename, formatTo, outFileName)
 #==========================================================================#
 if __name__=="__main__":
     root = tk.Tk() 
     Potdoc = MainWindow(root)
     Potdoc.mainloop()
-
-def click_ok():
-    #get parameters
-    filename = Potdoc.filename
-    formatTo= rbTo.curselection
-    formatFrom = rbFrom.curselection
-
-    #output filename
-    if txtTo.get=="":
-        pos = filename.find('.')
-        backtrack = len(filename) - pos
-        outFileName = filename[:backtrack]
-    else:
-        outFileName = txtTo.get
-    #style
-    if (stylecheckboxvar == 1):
-        style = getDirectory()
-        pos = style.find('.')
-        backtrack = len(filename) - pos
-        style = filename[:backtrack]
-    #extraargs
-    if txtExtraArgs == "":
-        extraArguaments=['--css {}'.format(style)]
-    else:
-        extraArguaments=['--css {}'.format(style), txtExtraArgs.get()]
-        print('it works')
-
-def go(filename, formatTo="pdf", formatFrom="md", outFileName="", style="styles/default.css", extraArguaments=""):        
-    try:
-        import pypandoc
-    except ImportError:
-        import pydocverter as pypandoc
-
-    fileoutput = pypandoc.convert_file(filename, formatTo, outputfile=outFileName, extra_args=extraArguaments)
-    # fileoutput = pypandoc.convert_file(filename, '.'.format(formatFrom), outputfile='{}.{}'.format(outFileName, formatTo), extra_args=['--css {}'.format(style), extraArguaments])
-
-    
-def select_file():
-    Potdoc.filename =  filedialog.askopenfilename(initialdir = "/",title = "Select file", filetypes = (("markdown files","*.md *.markdown"), ("plain text files","*.txt"), ("styles/themes","*.css"),("all files","*.*")))
-    return Potdoc.filename
 
