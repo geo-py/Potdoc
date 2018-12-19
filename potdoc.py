@@ -33,11 +33,6 @@ def convert(self, filepath, formatTo, outFileName):
     #    style = 'styles/defualt.css'
     #    extraArguments=('--css {}'.format(style))
     
-    #self.pypandocInput = '{filepath},{formatTo}, outputfile={outFileName},extraArgs={}'.format(filepath, formatTo, outFileName, extraArguments)
-    print(filepath)
-    print(outFileName)
-    print(formatTo)
-
     pypandoc.convert_file(filepath, formatTo, outputfile=outFileName)
 
 def cutFileext(filepath) :

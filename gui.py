@@ -92,7 +92,6 @@ class MainWindow(tk.Frame):
     def select_file(self):
         self.selected_file = tk.filedialog.askopenfilename(parent=self, initialdir = "Desktop/", title = "Select file", filetypes = (("markdown files","*.md *.markdown"), ("plain text files","*.txt"), ("all files","*.*")))
         self.vTxtInput.set(self.selected_file)
-        print(self.selected_file)
         return self.selected_file
 
     def select_style(self): #currently unused
@@ -106,7 +105,6 @@ class MainWindow(tk.Frame):
         
         #output filename
         outFileName=self.txtOutput.get()
-        print(outFileName)
 
         #styles
         #style='styles/default.css'
