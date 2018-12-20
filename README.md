@@ -6,7 +6,10 @@ Potdoc is a simple GUI frontend for [Pandoc](https://github.com/jgm/pandoc) writ
 1. Pandoc must be insatlled and in your ``PATH``. if Pandoc is not installed the Python package [Pydocverter](https://pypi.org/project/pydocverter/) will be used
 2. You must have a Pandoc supported LaTeX distribution (I suggest [MikTex](https://miktex.org/) for Windows) installed and in your ``PATH``. You can view [Pandoc.org](https://pandoc.org/installing.html) for more info on setting up Pandoc.
 3. [Python 3](https://www.python.org/downloads/) must be installed and in your ``PATH``
-   
+
+# Running
+to run Potdoc currently you must run the gui.py file 
+
 # Packages Used
 ##### Pypandoc
 which can be installed by running the following command
